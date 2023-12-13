@@ -1,4 +1,4 @@
-# 第四讲 使用 ethers.js 和区块链交互(上)
+# 第四讲 使用 ethers.js 和区块链交互（上）
 
 前面我们了解了通过代码操作 MetaMask，虽然能和区块链进行交互，但是受限于 MetaMask 的设计，我们需要更强大和方便的方式（库）。目前常用于此工作的工具有 [Web3.js](https://web3js.org/)、[ethers.js](https://docs.ethers.org/v6/)、[Web3-wrapper](https://github.com/0xProject/tools/tree/main/web3-wrapper)、[Alchemyweb3](https://www.npmjs.com/package/@alch/alchemy-web3) 和 [viem](https://viem.sh/) 等……
 
@@ -198,3 +198,5 @@ const tx = await contract.transfer(RECIPIENT_ADDRESS, amount);
 
 await tx.wait();
 ```
+
+至此我们介绍完了 ethers.js 调用合约函数的基本操作。
