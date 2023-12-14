@@ -157,9 +157,9 @@ JSON 解析（Parsed JSON）形式：
 
 上面的 ABI 描述了三个接口，1 个事件（`event`）和 2 个函数（`function`）。事件名为 `Approval`，事件发生时会依次传递三个参数：`address` 类型的 `owner`，`address` 类型的 `spender`，`uint256` 类型的 `value`。2 个函数分别为 `decimals` 和 `transfer`，调用 `decimals` 函数时无需传入参数，返回一个 `uint8` l 类型的数据，因为其带有 `view` 的标记，所以该函数是只读函数，调用时无需签名或登录。`transfer` 函数需传入 `address` 类型的 `recipient` 和 `uint256` 类型的 `amount`，返回 `bool` 类型的 `success`，因为其在 JSON 解析形 00000 式中标注 `nonpayable` 或在人可读形式中参数和 `returns` 之间没有特殊标记。
 
-ABI 详细内容可参考 https://docs.soliditylang.org/zh/latest/abi-spec.html ，这里只对部分内容进行说明。ABI 一般由数组组成，每一个元素代表一个函数、事件或错误，我们常见的是函数和事件。人可读形式元素一般形如 `类型 名称(参数类型1 参数名1, ...) 标记 returns (返回值类型1 返回值名1, ...)`，类型一般是 `event`（事件）和 `function`（函数），名称即为函数名或事件名，常见标记 `view`。在 JSON 解析形式中，`type` 表示类型，`name` 表示名称，`stateMutability` 表示标记，`inputs` 和 `outputs` 分别表示参数和返回值。
+ABI 详细内容可参考 https://docs.soliditylang.org/zh/latest/abi-spec.html ，这里只对部分内容进行说明。ABI 一般由数组组成，每一个元素代表一个函数、事件或错误，我们常见的是函数和事件。人可读形式元素一般形如 `类型 名称(参数类型1 参数名1, ...) 标记 returns (返回值类型1 返回值名1, ...)`，类型一般是 `event`（事件）和 `function`（函数），名称即为函数名或事件名，常见标记 `view`。在 JSON 解析形式中，`type` 表示类型，`name` 表示名称，`stateMutability` 表示标记，`inputs` 和 `outputs` 分别表示参数和返回值。标记表示函数的类型，标记了 `view` 的函数只执行读操作，标记了 `nonpayable` 的函数执行时不能附带向合约账户转账操作，标记了 `payable` 的函数执行可以向合约账户转账。
 
-标记表示函数的类型，标记了 `view` 的函数只执行读操作，标记了 `nonpayable` 的函数执行时不能附带向合约账户转账操作，标记了 `payable` 的函数执行可以向合约账户转账。
+ABI 常用来描述部署在区块链系统中的合约的接口，以方便上层应用调用。一个合约一般对外暴露若干事件和函数，而一个区块链应用可以有一个或多个合约。合约中的函数主要用于触发区块链上读或者写的操作，以完成自身业务；而合约中的事件会在执行合约中某些函数时触发，以对外广播信息，也可以用作信息记录。
 
 如果需要执行合约，需要先构造合约实例：
 
@@ -192,11 +192,10 @@ const decimals = await contract.decimals();
 
 // 换算获取 amount
 const amount = parseUnits("1.0", 18);
-
-// 执行写操作，返回
+// 执行写操作，返回交易对象
 const tx = await contract.transfer(RECIPIENT_ADDRESS, amount);
-
+// 等待交易执行完成
 await tx.wait();
 ```
 
-至此我们介绍完了 ethers.js 调用合约函数的基本操作。
+至此我们介绍完了 ethers.js 调用合约函数的基本操作，在下一节将更深入上面的代码。
