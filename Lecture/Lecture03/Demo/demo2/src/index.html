@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>第三讲 使用 JavaScript 访问 MetaMask - Demo2</title>
+</head>
+
+<body>
+  <h1>第三讲 使用 JavaScript 访问 MetaMask - Demo2</h1>
+
+  <button onclick="onRequestAccount()"> 登录 </button>
+  <button onclick="onGetAccounts()"> 获取当前登录的账号 </button>
+  <button onclick="onAddEthereumChain()"> 添加新网络 </button>
+  <button onclick="onSwitchEthereumChain()">切换网络</button>
+  <button onclick="onRequestPermissions()">授权</button>
+
+
+  <script>
+    // 验证 ethereum 注入:
+    console.log("Demo2 - ethereum: ", ethereum);
+
+    function onRequestAccount() {
+      // `eth_requestAccounts` 用于登录 
+      window?.ethereum.request({
+        method: "eth_requestAccounts",
+        params: [],
+      });
+    }
+
+    function onGetAccounts() {
+      // `eth_accounts` 用来获取当前 MetaMask 登录的账号地址
+      window?.ethereum.request({
+        "method": "eth_accounts",
+        "params": []
+      });
+    }
+
+    function onAddEthereumChain() {
+      // `wallet_addEthereumChain` 用来向 MataMask 添加网络
+      window?.ethereum.request({
+        "method": "wallet_addEthereumChain",
+        "params": [
+          {
+            "chainId": "0x64",
+            "chainName": "Gnosis",
+            "rpcUrls": ["https://rpc.ankr.com/gnosis"],
+            "iconUrls": [
+              "https://xdaichain.com/fake/example/url/xdai.svg",
+              "https://xdaichain.com/fake/example/url/xdai.png"
+            ],
+            "nativeCurrency": {
+              "name": "xDAI",
+              "symbol": "xDAI",
+              "decimals": 18
+            },
+            "blockExplorerUrls": ["https://blockscout.com/poa/xdai/"]
+          }
+        ]
+      });
+    }
+
+    function onSwitchEthereumChain() {
+      // `wallet_switchEthereumChain` 切换链
+      window?.ethereum.request({
+        "method": "wallet_switchEthereumChain",
+        "params": [
+          {
+            "chainId": "0x64"
+          }
+        ]
+      });
+    }
+
+    function onRequestPermissions() {
+      // `wallet_requestPermissions` 授权
+      window?.ethereum.request({
+        "method": "wallet_requestPermissions",
+        "params": [
+          {
+            "eth_accounts": {}
+          }
+        ]
+      });
+    }
+
+
+    // 监听账号登录状态改变
+    window?.ethereum?.on('accountsChanged', (accounts) => console.log(accounts));
+
+    // 监听切换换链工具
+    window?.ethereum.on('chainChanged', (chainId) => console.log(chainId));
+
+    // 监听账号在当前网站链接网络
+    window?.ethereum.on('connect', (connectInfo) => console.log(connectInfo));
+
+  </script>
+</body>
+
+</html>

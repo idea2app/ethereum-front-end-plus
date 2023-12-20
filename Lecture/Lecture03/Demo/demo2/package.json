@@ -1,0 +1,16 @@
+{
+  "name": "demo2",
+  "version": "0.0.1",
+  "description": "第三讲 使用 JavaScript 访问 MetaMask - Demo2",
+  "source": "src/index.html",
+  "author": "idea2app",
+  "license": "ISC",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "devDependencies": {
+    "parcel": "latest"
+  },
+  "scripts": {
+    "dev": "parcel",
+    "build": "parcel build"
+  }
+}
