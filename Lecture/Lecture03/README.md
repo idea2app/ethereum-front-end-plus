@@ -34,6 +34,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>第三讲 使用 JavaScript 访问 MetaMask - Demo2</title>
   </head>
 
