@@ -8,7 +8,7 @@ const abi = [
   "function transfer(address recipient, uint256 amount) returns (bool success)"
 ]
 
-const contract = new Contract(CONTRACT_ADDRESS, abi, provider);
+const contract = new Contract(CONTRACT_ADDRESS, abi, signer);
 
 const decimals = await contract.decimals();
 
