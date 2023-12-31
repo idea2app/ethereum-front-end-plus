@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 contract MBTIStorage {
-    address public owner;
-    mapping(address => string) public mbtiData;
+    address private owner;
+    mapping(address => string) private mbtiData;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only the owner can call this function");
