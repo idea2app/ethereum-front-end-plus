@@ -2,22 +2,22 @@
 pragma solidity ^0.8.0;
 
 contract MBTIStorage {
-    address private owner;
-    mapping(address => string) private mbtiData;
+    address private _owner;
+    mapping(address => string) private _mbtiData;
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Only the owner can call this function");
+        require(msg.sender == _owner, "Only the owner can call this function");
         _;
     }
 
     event MBTIUpdated(address indexed user, string mbtiType);
 
     constructor() {
-        owner = msg.sender;
+        _owner = msg.sender;
     }
 
-    function isValidMBTI(string memory _mbtiType) internal pure returns (bool) {
-        bytes memory mbtiBytes = bytes(_mbtiType);
+    function isValidMBTI(string memory mbtiType) internal pure returns (bool) {
+        bytes memory mbtiBytes = bytes(mbtiType);
         if (mbtiBytes.length != 4) {
             return false; // MBTI type should be 4 characters long
         }
@@ -25,13 +25,13 @@ contract MBTIStorage {
         return true;
     }
 
-    function updateMBTI(string memory _mbtiType) public {
-        require(isValidMBTI(_mbtiType), "Invalid MBTI type");
-        mbtiData[msg.sender] = _mbtiType;
-        emit MBTIUpdated(msg.sender, _mbtiType);
+    function updateMBTI(string memory mbtiType) public {
+        require(isValidMBTI(mbtiType), "Invalid MBTI type");
+        _mbtiData[msg.sender] = mbtiType;
+        emit MBTIUpdated(msg.sender, mbtiType);
     }
 
-    function getMBTI(address _user) public view returns (string memory) {
-        return mbtiData[_user];
+    function getMBTI(address user) public view returns (string memory) {
+        return _mbtiData[user];
     }
 }
