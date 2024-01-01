@@ -1,108 +1,109 @@
 # MBTI 合约说明
 
 ## ABI
+
 ```json
 [
   {
-    inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
   },
   {
-    anonymous: false,
-    inputs: [
+    "anonymous": false,
+    "inputs": [
       {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address",
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
       },
       {
-        indexed: false,
-        internalType: "int256",
-        name: "mbtiType",
-        type: "int256",
-      },
+        "indexed": false,
+        "internalType": "int256",
+        "name": "mbtiType",
+        "type": "int256"
+      }
     ],
-    name: "MBTIUpdated",
-    type: "event",
+    "name": "MBTIUpdated",
+    "type": "event"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "int8",
-        name: "mbtiType",
-        type: "int8",
-      },
+        "internalType": "int8",
+        "name": "mbtiType",
+        "type": "int8"
+      }
     ],
-    name: "claimMBTI",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "claimMBTI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
     ],
-    name: "getMBTI",
-    outputs: [
+    "name": "getMBTI",
+    "outputs": [
       {
-        internalType: "int256",
-        name: "",
-        type: "int256",
-      },
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [],
-    name: "getMyMBTI",
-    outputs: [
+    "inputs": [],
+    "name": "getMyMBTI",
+    "outputs": [
       {
-        internalType: "int256",
-        name: "",
-        type: "int256",
-      },
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
     ],
-    stateMutability: "view",
-    type: "function",
+    "stateMutability": "view",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "address payable",
-        name: "user",
-        type: "address",
+        "internalType": "address payable",
+        "name": "user",
+        "type": "address"
       },
       {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
     ],
-    name: "sendContractBalance",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    "name": "sendContractBalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    inputs: [
+    "inputs": [
       {
-        internalType: "int8",
-        name: "mbtiType",
-        type: "int8",
-      },
+        "internalType": "int8",
+        "name": "mbtiType",
+        "type": "int8"
+      }
     ],
-    name: "updateMBTI",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
+    "name": "updateMBTI",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
 ]
 ```
 
@@ -111,6 +112,7 @@
 **涉及 hardhat，推荐使用 bash**
 
 ### 环境初始化
+
 最好使用 `yarn` 或 `npm`，目前 hardhat 对 `pnpm` 支持有限
 
 ```bash
@@ -119,6 +121,7 @@ yarn
 ```
 
 ### 使用 remix 进行本地测试
+
 ```bash
 cd contract
 yarn
