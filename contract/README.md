@@ -20,9 +20,9 @@
       },
       {
         "indexed": false,
-        "internalType": "int256",
+        "internalType": "int8",
         "name": "mbtiType",
-        "type": "int256"
+        "type": "int8"
       }
     ],
     "name": "MBTIUpdated",
@@ -42,6 +42,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "destroyMBTI",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -52,9 +59,9 @@
     "name": "getMBTI",
     "outputs": [
       {
-        "internalType": "int256",
+        "internalType": "int8",
         "name": "",
-        "type": "int256"
+        "type": "int8"
       }
     ],
     "stateMutability": "view",
@@ -65,9 +72,9 @@
     "name": "getMyMBTI",
     "outputs": [
       {
-        "internalType": "int256",
+        "internalType": "int8",
         "name": "",
-        "type": "int256"
+        "type": "int8"
       }
     ],
     "stateMutability": "view",
@@ -143,11 +150,11 @@ remixd -s <absolute-path-to-the-shared-folder> --remix-ide https://remix.ethereu
 cd contract
 
 # 编译
-npx harrdhat compile
+npx hardhat compile
 
 # 清除缓存
-npx harrdhat clean
+npx hardhat clean
 
 # 启用本地模拟链
-npx harrdhat node
+npx hardhat node
 ```

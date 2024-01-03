@@ -15,9 +15,9 @@
       },
       {
         "indexed": false,
-        "internalType": "int256",
+        "internalType": "int8",
         "name": "mbtiType",
-        "type": "int256"
+        "type": "int8"
       }
     ],
     "name": "MBTIUpdated",
@@ -37,6 +37,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "destroyMBTI",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -47,9 +54,9 @@
     "name": "getMBTI",
     "outputs": [
       {
-        "internalType": "int256",
+        "internalType": "int8",
         "name": "",
-        "type": "int256"
+        "type": "int8"
       }
     ],
     "stateMutability": "view",
@@ -60,9 +67,9 @@
     "name": "getMyMBTI",
     "outputs": [
       {
-        "internalType": "int256",
+        "internalType": "int8",
         "name": "",
-        "type": "int256"
+        "type": "int8"
       }
     ],
     "stateMutability": "view",
