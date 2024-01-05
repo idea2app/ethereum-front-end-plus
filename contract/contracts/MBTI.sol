@@ -28,7 +28,7 @@ contract MBTI {
     }
 
     function setMBTI(int8 mbtiType) private {
-        require(mbtiType >= 0 && mbtiType <= 8, "Invalid MBTI type.");
+        require(mbtiType >= 0 && mbtiType < 8, "Invalid MBTI type.");
         _mbtiData[tx.origin] = mbtiType + 1;
         emit MBTIUpdated(tx.origin, mbtiType);
     }
