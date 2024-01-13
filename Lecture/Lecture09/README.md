@@ -188,7 +188,7 @@ export default function Home() {
     setUserAddress(accounts?.[0]);
   }, []);
 
-  useEffect(()=>{ handleRequestAccounts ()}, [])
+  useEffect(() => { handleRequestAccounts() }, []);
 
   const onLogin = async () => setUserAddress(await metaMaskStore.connectWallet())
 

@@ -18,14 +18,14 @@ export default function Home() {
     setUserAddress(accounts?.[0]);
   }, []);
 
-  useEffect(()=>{ handleRequestAccounts ()}, [])
+  useEffect(() => { handleRequestAccounts() }, []);
 
   const onLogin = async () => setUserAddress(await metaMaskStore.connectWallet())
 
   return (
     <Container as="main">
       <h1 className='text-center mt-5 mb-3'>MBTI</h1>
-      <LoginLogout address={userAddress} onLogin={onLogin} onLogout={() => {localStorage.i += "1"}}/>
+      <LoginLogout address={userAddress} onLogin={onLogin} />
     </Container>
   )
 }
