@@ -1,8 +1,13 @@
 import { chainList, defaultChainID } from './ChainInfo';
 
+const { localStorage } = globalThis;
+
 class MetaMask {
   constructor() {
-    globalThis.window?.ethereum?.on('accountsChanged', this.switchDefaultChainAndReload);
+    globalThis.window?.ethereum?.on('accountsChanged', accounts => {
+      localStorage.account = (accounts as string[])?.[0] ?? "";
+      this.switchDefaultChainAndReload();
+    });
 
     globalThis.window?.ethereum?.on('chainChanged', this.switchDefaultChainAndReload);
   }
@@ -34,7 +39,7 @@ class MetaMask {
 
   switchDefaultChain = () => this.switchChain(defaultChainID);
 
-  switchDefaultChainAndReload = async() => {
+  switchDefaultChainAndReload = async () => {
     await this.switchDefaultChain();
     location.reload();
   }
