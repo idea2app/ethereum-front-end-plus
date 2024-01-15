@@ -1,6 +1,6 @@
 class MetaMask {
   constructor() {
-    window?.ethereum?.on('accountsChanged', () => location.reload());
+    globalThis.window?.ethereum?.on('accountsChanged', () => location.reload());
   }
 
   async connectWallet() {
