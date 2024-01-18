@@ -1,12 +1,13 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 import { LoginLogout } from '../components/LoginLogout';
 import { MbtiSelect } from '../components/MbtiSelect';
 import mbtiStore from '../models/Mbti';
 import metaMaskStore from '../models/MetaMask';
+import { convertMbtiToString } from '../utils/mbti';
 
 globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
   const { message, body } = reason || {};
@@ -23,24 +24,32 @@ export default function Home() {
 
   const [mbtiSelectValue, setMbtiSelectValue] = useState<number>(0)
 
-  const handleRequestAccounts = useCallback(async () => {
+  const [myMbti, setMyMbti] = useState<number>(-1);
+
+  const handlePageInitRequest = useCallback(async () => {
     const accounts = await window.ethereum.request<string[]>({
       method: "eth_accounts",
       params: [],
     });
-
     const localStorageAccount = localStorage?.account;
 
-    return setUserAddress(
-      localStorage.account =
-      (!accounts?.length || !localStorageAccount)
-        ? ""
-        : accounts.includes(localStorageAccount)
-          ? localStorageAccount : accounts[0]
+    setUserAddress(
+      () => localStorage.account =
+        (!accounts?.length || !localStorageAccount)
+          ? ""
+          : accounts.includes(localStorageAccount)
+            ? localStorageAccount : accounts[0]
     );
+
+    try {
+      setMyMbti(localStorageAccount ? await mbtiStore.getMyMBTI() : -1);
+    } catch (error: any) {
+      if (error?.reason !== "MBTI is not initialized.")
+        throw error;
+    }
   }, []);
 
-  useEffect(() => { handleRequestAccounts() }, []);
+  useEffect(() => { handlePageInitRequest() }, []);
 
   const onLogin = async () =>
     setUserAddress(localStorage.account = await metaMaskStore.connectWallet());
@@ -50,18 +59,48 @@ export default function Home() {
     location.reload();
   }
 
+  const onClaimMBTI = async () => {
+    const tx = await mbtiStore.claimMBTI(mbtiSelectValue);
+    await tx.wait();
+    setMyMbti(mbtiSelectValue);
+  }
+
+  const onUpdateMBTI = async () => {
+    if(mbtiSelectValue === myMbti) return;
+
+    const tx = await mbtiStore.updateMBTI(mbtiSelectValue);
+    await tx.wait();
+    setMyMbti(mbtiSelectValue);
+  }
+
+  const onDestroyMBTI = async () => {
+    const tx = await mbtiStore.destroyMBTI();
+    await tx.wait();
+    setMyMbti(-1);
+  }
+
   return (
     <Container as="main">
       <h1 className='text-center mt-5 mb-3'>MBTI</h1>
 
       <LoginLogout {...{ address: userAddress, onLogin, onLogout }} />
 
-      {userAddress && <MbtiSelect mbti={mbtiSelectValue} onChange={setMbtiSelectValue} />}
+      {userAddress && <>
+        <MbtiSelect mbti={mbtiSelectValue} onChange={setMbtiSelectValue} />
 
-      {userAddress && <Button
-        className='w-100'
-        onClick={() => mbtiStore.claimMBTI(mbtiSelectValue)}
-      >Claim MBTI</Button>}
+        {myMbti < 0 && <Button className='w-100' onClick={onClaimMBTI} >Claim MBTI</Button>}
+
+        {myMbti >= 0 && <>
+          <Row className='d-flex justify-content-around'>
+            <Col as={Button} xs={5} onClick={onUpdateMBTI}>更新</Col>
+            <Col as={Button} variant="danger" xs={5} onClick={onDestroyMBTI}>销毁</Col>
+          </Row>
+
+          <Card body className='fs-1 bg-warning-subtle text-center mt-3 mb-5 shadow'>
+            {convertMbtiToString(myMbti)}
+          </Card>
+        </>}
+      </>}
     </Container>
   )
 }
