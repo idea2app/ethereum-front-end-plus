@@ -321,31 +321,45 @@ class MetaMask {
 }
 ```
 
+考虑到合约的事件比较多，在 `/src/models` 文件夹创建一个 `Mbti.ts` 文件，在 `Mbti` 类中创建一个 `claimMBTI` 方法：
+
+```ts
+import { abiAndAddress } from './AbiAndAddress';
+import metaMaskStore from './MetaMask';
+
+class Mbti {
+  async claimMBTI(value: number){
+    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(abiAndAddress.mbti);
+
+    return mbtiContract.claimMBTI(value);
+  }
+}
+
+export default new Mbti();
+```
+
 在 `/src/app/page.tsx` 中添加 `Claim MBTI` 按钮及对应的点击事件：
 
 ```tsx
 // ...
 import { Button, Container } from 'react-bootstrap';
 // ...
-import { abiAndAddress } from '../models/AbiAndAddress';
+import mbtiStore from '../models/Mbti';
 // ...
 export default function Home() {
 // ...
-  const onClaim = async() => {
-    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(abiAndAddress.mbti);
-
-    return mbtiContract.claimMBTI(mbtiSelectValue);
-  }
-
   return (
     <Container as="main">
       <h1 className='text-center mt-5 mb-3'>MBTI</h1>
 
       <LoginLogout {...{ address: userAddress, onLogin, onLogout }} />
 
-      {userAddress && <MbtiSelect mbti={mbtiSelectValue} onChange={setMbtiSelectValue}/>}
+      {userAddress && <MbtiSelect mbti={mbtiSelectValue} onChange={setMbtiSelectValue} />}
 
-      {userAddress && <Button className='w-100' onClick={onClaim}>Claim MBTI</Button>}
+      {userAddress && <Button
+        className='w-100'
+        onClick={() => mbtiStore.claimMBTI(mbtiSelectValue)}
+      >Claim MBTI</Button>}
     </Container>
   )
 }

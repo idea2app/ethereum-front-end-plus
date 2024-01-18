@@ -5,7 +5,7 @@ import { Button, Container } from 'react-bootstrap';
 
 import { LoginLogout } from '../components/LoginLogout';
 import { MbtiSelect } from '../components/MbtiSelect';
-import { abiAndAddress } from '../models/AbiAndAddress';
+import mbtiStore from '../models/Mbti';
 import metaMaskStore from '../models/MetaMask';
 
 globalThis.addEventListener?.('unhandledrejection', ({ reason }) => {
@@ -50,21 +50,18 @@ export default function Home() {
     location.reload();
   }
 
-  const onClaim = async() => {
-    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(abiAndAddress.mbti);
-
-    return mbtiContract.claimMBTI(mbtiSelectValue);
-  }
-
   return (
     <Container as="main">
       <h1 className='text-center mt-5 mb-3'>MBTI</h1>
 
       <LoginLogout {...{ address: userAddress, onLogin, onLogout }} />
 
-      {userAddress && <MbtiSelect mbti={mbtiSelectValue} onChange={setMbtiSelectValue}/>}
+      {userAddress && <MbtiSelect mbti={mbtiSelectValue} onChange={setMbtiSelectValue} />}
 
-      {userAddress && <Button className='w-100' onClick={onClaim}>Claim MBTI</Button>}
+      {userAddress && <Button
+        className='w-100'
+        onClick={() => mbtiStore.claimMBTI(mbtiSelectValue)}
+      >Claim MBTI</Button>}
     </Container>
   )
 }
