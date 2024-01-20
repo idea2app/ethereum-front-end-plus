@@ -2,7 +2,15 @@
 
 前面我们已经搭建好了项目框架，接下来我们将完成应用的第一个功能——登录。
 
-## 前情回顾
+## 需求分析
+
+登录相关的功能要求点击登录按钮，调起 MetaMask，并提示授权登录，当授权登录后，页面更新授权账号相关信息；当账号切换，应用也需要自动更新授权账号相关信息；通过 MetaMask 取消授权，应用自动退出。
+
+![线框图](./image/wireframe_drawing_lecture09.png)
+
+在线框图中，应该完成登录，登录后显示登录账号地址及退出按钮的功能。
+
+## 回顾
 
 在写具体项目业务之前，我们对前面的内容进行简要的回顾。
 
@@ -28,13 +36,14 @@ await window.ethereum.request({
 
 MetaMask 还提供了事件监听，`accountsChanged` 事件在账号登录状态改变后触发，回调函数的参数是一个数组，该数组内是目前登录的账号地址。
 
-## 功能分析
+```javaScript
+function handleAccountsChanged(accounts) {
+  // 事件触发后执行的代码
+}
 
-登录相关的功能要求点击登录按钮，调起 MetaMask，并提示授权登录，当授权登录后，页面更新授权账号相关信息；当账号切换，应用也需要自动更新授权账号相关信息；通过 MetaMask 取消授权，应用自动退出。
-
-![线框图](./image/wireframe_drawing_lecture09.png)
-
-在线框图中，应该完成登录，登录后显示登录账号地址及退出按钮的功能。
+// 监听
+window.ethereum.on('accountsChanged', handleAccountsChanged);
+```
 
 ## 功能编写
 
