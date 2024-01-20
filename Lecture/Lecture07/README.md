@@ -10,30 +10,10 @@ MBTI（Myers-Briggs Type Indicator）是一种广泛使用的性格类型评估�
 
 ![线框图](./image/wireframe_drawing.png)
 
-合约部署在 Sepolia 网络上，其地址是 `0x2f3d4923e5dd2ccdbe4d46e4e2d89bb1bd20cabf`，合约 ABI 如下：
+合约部署在 Sepolia 网络上，其地址是 `0x9f47Ea16345c09523a6A1DA1B84f5EB4E1bea221`，合约 ABI 如下：
 
 ```json
 [
-  {
-    "inputs": [
-      {
-        "internalType": "int8",
-        "name": "mbtiType",
-        "type": "int8"
-      }
-    ],
-    "name": "claimMBTI",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "destroyMBTI",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
   {
     "inputs": [],
     "stateMutability": "nonpayable",
@@ -61,30 +41,19 @@ MBTI（Myers-Briggs Type Indicator）是一种广泛使用的性格类型评估�
   {
     "inputs": [
       {
-        "internalType": "address payable",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      }
-    ],
-    "name": "sendContractBalance",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "int8",
         "name": "mbtiType",
         "type": "int8"
       }
     ],
-    "name": "updateMBTI",
+    "name": "claimMBTI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "destroyMBTI",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -119,6 +88,37 @@ MBTI（Myers-Briggs Type Indicator）是一种广泛使用的性格类型评估�
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "sendContractBalance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int8",
+        "name": "mbtiType",
+        "type": "int8"
+      }
+    ],
+    "name": "updateMBTI",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   }
 ]
