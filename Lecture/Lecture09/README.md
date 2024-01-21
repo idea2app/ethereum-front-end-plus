@@ -18,7 +18,7 @@
 
 `eth_requestAccounts` 主要用于登录:
 
-```ts
+```javaScript
 await window.ethereum.request({
   method: "eth_requestAccounts",
   params: [],
@@ -124,7 +124,7 @@ import { MetaMaskInpageProvider } from '@metamask/providers';
 
 declare global {
   interface Window {
-    ethereum: MetaMaskInpageProvider;
+    ethereum?: MetaMaskInpageProvider;
   }
 }
 ```
@@ -140,6 +140,7 @@ class MetaMask {
     const [account] = (await window?.ethereum.request({
       method: 'eth_requestAccounts',
     })) as string[];
+
     return account;
   }
 }
@@ -189,7 +190,7 @@ export default function Home() {
   const [userAddress, setUserAddress] = useState<string>();
 
   const handleRequestAccounts = useCallback(async () => {
-    const accounts = await window.ethereum.request<string[]>({
+    const accounts = await window.ethereum?.request<string[]>({
       method: "eth_accounts",
       params: [],
     });
@@ -225,6 +226,7 @@ class MetaMask {
     const [account] = (await window.ethereum.request({
       method: 'eth_requestAccounts',
     })) as string[];
+
     return account;
   }
 }
