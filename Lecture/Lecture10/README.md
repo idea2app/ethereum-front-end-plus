@@ -90,19 +90,18 @@ export default new MetaMask();
 
 ```ts
 // ...
-  async switchChain(chainId: string, chainInfo: Record<string, unknown>) {
+  async switchChain(chainInfo: Record<string, unknown>) {
     try {
       await window?.ethereum?.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId }],
+        params: [{ chainId: chainInfo.chainId }],
       });
     } catch (switchError: any) {
-      if (switchError.code === 4902) {
-        await window?.ethereum?.request({
+      if (switchError.code === 4902)
+        window?.ethereum?.request({
           method: 'wallet_addEthereumChain',
           params: [chainInfo],
         });
-      }
     }
   }
 // ...
@@ -119,7 +118,7 @@ class MetaMask {
   // ...
 
   switchDefaultChain = () =>
-    this.switchChain(defaultChainInfo.chainId, defaultChainInfo);
+    this.switchChain(defaultChainInfo);
 }
 
 export default new MetaMask();
