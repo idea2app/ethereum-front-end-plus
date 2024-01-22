@@ -111,7 +111,7 @@ export default function Home() {
           </Card>
         </>}
 
-        {myHistory.length > 0 && <ClaimHistory record={myHistory.toReversed()} />}
+        {myHistory.length > 0 && <ClaimHistory record={myHistory} />}
       </>}
     </Container>
   )

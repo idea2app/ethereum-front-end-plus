@@ -18,7 +18,7 @@
 
 ## 功能实现
 
-我们先完成 UI 部分，在 `/src/components` 目录下创建 `ClaimHistory.tsx` 文件，创建 `ClaimHistory` 组件，该组件可传入需要显示列表，该列表是由 MBTI 记录倒序排列的（`reversed` 表示顺序列表的编号倒叙排列）：
+我们先完成 UI 部分，在 `/src/components` 目录下创建 `ClaimHistory.tsx` 文件，创建 `ClaimHistory` 组件，该组件可**正序**传入需要显示列表，该列表是由 MBTI 记录**倒序**排列的（`reversed` 表示顺序列表的编号倒叙排列）：
 
 ```tsx
 import { FC } from "react"
@@ -30,8 +30,18 @@ interface ClaimHistoryProps {
 export const ClaimHistory: FC<ClaimHistoryProps> = ({ record }) => {
   return <>
     <h2 className="text-center mt-1">历史</h2>
-    <ol reversed className="w-25">
-      {record?.map((item, index) => <li key={item + index}>{item}</li>)}
+    <ol reversed className="list-unstyled">
+      {record
+        ?.toReversed()
+        .map((item, index, arr) =>
+          <li key={item + index} className="text-center">
+            <span className="me-2">
+              {arr.length - index}
+              {index === 0 && <sup className="text-danger">*</sup>}.
+            </span>
+            {item}
+          </li>
+        )}
     </ol>
   </>
 }
@@ -63,7 +73,7 @@ export default function Home() {
           </Card>
         </>}
 
-        {myHistory.length > 0 && <ClaimHistory record={myHistory.toReversed()} />}
+        {myHistory.length > 0 && <ClaimHistory record={myHistory} />}
       </>}
 // ...
 }
