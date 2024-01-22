@@ -14,7 +14,18 @@
 
 ## 回顾
 
+```javaScript
+const abi = [
+  "event Transfer(address indexed from, address indexed to, uint amount)"
+]
 
+const contract = new Contract(CONTRACT_ADDRESS, abi, provider)
+
+const filter = contract.filters.Transfer
+const events = await contract.queryFilter(filter)
+```
+
+上面的例子可以看出，可以通过 `Contract` 实例上的 [`queryFilter()`](https://docs.ethers.org/v6/api/contract/#BaseContract-queryFilter) 方法可以查询该合约上的事件，可以传入参数进行过滤，其第一个参数可以传入和上面 `on()` 方法第一个参数相同的参数；第二和第三个参数可以指定需要查询的起始和终止区块，限定查询的区块范围。
 
 ## 功能实现
 
