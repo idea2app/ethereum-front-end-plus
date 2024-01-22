@@ -46,22 +46,18 @@ MetaMask 还提供了事件监听，`chainChanged` 事件在当前链改变后�
 我们先在 `/src/models` 文件夹下创建一个 `ChainInfo.ts` 的文件，在里面添加“Binance Smart Chain Testnet”相关信息：
 
 ```ts
-export const chainList = [
-  {
-    chainId: "0x61",
-    chainName: "Binance Smart Chain Testnet",
-    nativeCurrency: {
-      name: "Binance Chain Native Token",
-      symbol: "tBNB",
-      decimals: 18,
-    },
-    rpcUrls: ["https://bsc-testnet.publicnode.com"],
-    blockExplorerUrls: ["https://testnet.bscscan.com"],
+export const defaultChainInfo = {
+  chainId: "0x61",
+  chainName: "Binance Smart Chain Testnet",
+  nativeCurrency: {
+    name: "Binance Chain Native Token",
+    symbol: "tBNB",
+    decimals: 18,
   },
-];
+  rpcUrls: ["https://bsc-testnet.publicnode.com"],
+  blockExplorerUrls: ["https://testnet.bscscan.com"],
+};
 ```
-
-为了较好的拓展性，这里使用数组存储相关信息。
 
 接下来，我们在 `/src/models/MetaMask.ts` 编写切换网络相关的功能，我们为 `MetaMask` 类添加一个 `switchChain` 方法：
 
@@ -94,7 +90,7 @@ export default new MetaMask();
 
 ```ts
 // ...
-  async switchChain(chainId: string) {
+  async switchChain(chainId: string, chainInfo: Record<string, unknown>) {
     try {
       await window?.ethereum?.request({
         method: 'wallet_switchEthereumChain',
@@ -104,7 +100,7 @@ export default new MetaMask();
       if (switchError.code === 4902) {
         await window?.ethereum?.request({
           method: 'wallet_addEthereumChain',
-          params: chainList,
+          params: [chainInfo],
         });
       }
     }
@@ -114,15 +110,7 @@ export default new MetaMask();
 
 再次登录，并点击“退出”按钮验证，发现弹出弹框，提示添加网络，点击“批准”，又提示是否切换网络，点击“切换网络”，此时钱包已经切换至目标网络。
 
-我们希望在连接钱包和切换网络时都切换至目标链，避免连接非目标网络发生异常。先在 `/src/models/ChainInfo.ts` 设置默认链 ID，方便修改：
-
-```ts
-export const defaultChainID = '0x61';
-
-// ...
-```
-
-在 `/src/app/MetaMask.ts` 文件中为 `MetaMask` 新增一个方法 `switchDefaultChain`：
+我们希望在连接钱包和切换网络时都切换至目标链，避免连接非目标网络发生异常。在 `/src/app/MetaMask.ts` 文件中为 `MetaMask` 新增一个方法 `switchDefaultChain`：
 
 ```ts
 import { chainList, defaultChainID } from './ChainInfo';
@@ -130,7 +118,8 @@ import { chainList, defaultChainID } from './ChainInfo';
 class MetaMask {
   // ...
 
-  switchDefaultChain = () => this.switchChain(defaultChainID);
+  switchDefaultChain = () =>
+    this.switchChain(defaultChainInfo.chainId, defaultChainInfo);
 }
 
 export default new MetaMask();
@@ -172,22 +161,17 @@ class MetaMask {
 将 `/src/models/ChainInfo.ts` 的内容替换成“Sepolia 测试网络”：
 
 ```ts
-export const defaultChainID = '0xaa36a7';
-
-export const chainList = [
-  {
-    chainId: '0xaa36a7',
-    chainName: 'Sepolia测试网络',
-    nativeCurrency: {
-      name: 'Sepolia Ether',
-      symbol: 'SepoliaETH',
-      decimals: 18,
-    },
-    rpcUrls: ['https://sepolia.infura.io/v3/'],
-    blockExplorerUrls: ['https://sepolia.etherscan.io'],
+export const defaultChainInfo = {
+  chainId: '0xaa36a7',
+  chainName: 'Sepolia测试网络',
+  nativeCurrency: {
+    name: 'Sepolia Ether',
+    symbol: 'SepoliaETH',
+    decimals: 18,
   },
-];
-
+  rpcUrls: ['https://sepolia.infura.io/v3/'],
+  blockExplorerUrls: ['https://sepolia.etherscan.io'],
+};
 ```
 
 在预览页面进行验证，看是否目标网络指向“Sepolia测试网络”。
