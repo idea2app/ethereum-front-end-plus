@@ -27,7 +27,7 @@ export default function Home() {
   const [myMbti, setMyMbti] = useState<number>(-1);
 
   const handlePageInitRequest = useCallback(async () => {
-    const accounts = await window.ethereum.request<string[]>({
+    const accounts = await window.ethereum?.request<string[]>({
       method: "eth_accounts",
       params: [],
     });

@@ -69,7 +69,7 @@ import { convertMbtiToString } from '../utils/mbti';
 export default function Home() {
 // ...
   const handlePageInitRequest = useCallback(async () => {
-    const accounts = await window.ethereum.request<string[]>({
+    const accounts = await window.ethereum?.request<string[]>({
       method: "eth_accounts",
       params: [],
     });

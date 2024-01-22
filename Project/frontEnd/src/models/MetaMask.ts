@@ -29,6 +29,7 @@ class MetaMask {
     const [account] = (await window.ethereum.request({
       method: 'eth_requestAccounts',
     })) as string[];
+
     return account;
   }
 

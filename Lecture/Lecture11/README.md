@@ -46,7 +46,7 @@ export default function Home() {
   const { localStorage } = globalThis;
 // ...
   const handleRequestAccounts = useCallback(async () => {
-    const accounts = await window.ethereum.request<string[]>({
+    const accounts = await window.ethereum?.request<string[]>({
       method: "eth_accounts",
       params: [],
     });
