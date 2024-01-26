@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
+import { ClaimHistory } from '../components/ClaimHistory';
 import { LoginLogout } from '../components/LoginLogout';
 import { MbtiSelect } from '../components/MbtiSelect';
 import mbtiStore from '../models/Mbti';
@@ -26,6 +27,8 @@ export default function Home() {
 
   const [myMbti, setMyMbti] = useState<number>(-1);
 
+  const [myHistory, setMyHistory] = useState<string[]>([]);
+
   const handlePageInitRequest = useCallback(async () => {
     const accounts = await window.ethereum?.request<string[]>({
       method: "eth_accounts",
@@ -47,6 +50,11 @@ export default function Home() {
       if (error?.reason !== "MBTI is not initialized.")
         throw error;
     }
+
+    setMyHistory(
+      (localStorageAccount ? await mbtiStore.getRecord(localStorageAccount) : [])
+        .map(item => convertMbtiToString(item))
+    )
   }, []);
 
   useEffect(() => { handlePageInitRequest() }, []);
@@ -66,11 +74,13 @@ export default function Home() {
   }
 
   const onUpdateMBTI = async () => {
-    if(mbtiSelectValue === myMbti) return;
+    if (mbtiSelectValue === myMbti) return;
 
     const tx = await mbtiStore.updateMBTI(mbtiSelectValue);
     await tx.wait();
+
     setMyMbti(mbtiSelectValue);
+    setMyHistory(myHistory => [...myHistory, convertMbtiToString(mbtiSelectValue)])
   }
 
   const onDestroyMBTI = async () => {
@@ -100,6 +110,8 @@ export default function Home() {
             {convertMbtiToString(myMbti)}
           </Card>
         </>}
+
+        {myHistory.length > 0 && <ClaimHistory record={myHistory} />}
       </>}
     </Container>
   )
