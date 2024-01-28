@@ -20,10 +20,11 @@
 // 获取 provider
 const provider = window.ethereum ? new ethers.BrowserProvider(window.ethereum) : ethers.getDefaultProvider();
 
-// 构建 Contract 实例
-// 注意此处传入的是 Provider 实例，可以执行写操作；
-//     反之如果传入 Signer 实例，则不能执行写操作；
-const contract = new Contract(CONTRACT_ADDRESS, abi, provider);
+// 获取 signer
+const signer = provider?.getSigner();
+
+// 构建 Contract 实例,注意此处传入的是 Signer 实例，可以执行写操作；反之如果传入 Provider 实例，则不能执行写操作；
+const contract = new Contract(CONTRACT_ADDRESS, abi, PROVIDER_OR_SIGNER);
 
 // 执行只读函数，直接返回结果
 const decimals = await contract.decimals();
