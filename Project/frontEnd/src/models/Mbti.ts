@@ -37,7 +37,6 @@ class Mbti {
     const eventLogs = await contract.queryFilter(filter) as EventLog[];
 
     return eventLogs.map(({ args }) => Number((args[1] as BigInt).toString()))
-      .filter(item => item >= 0)
   }
 }
 
