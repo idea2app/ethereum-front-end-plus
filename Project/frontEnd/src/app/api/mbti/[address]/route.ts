@@ -1,9 +1,9 @@
 import { ethers } from 'ethers';
 
 import { abiAndAddress } from '../../../../models/AbiAndAddress'
-import { chainList } from '../../../../models/ChainInfo'
+import { defaultChainInfo } from '../../../../models/ChainInfo'
 
-const url = chainList[0].rpcUrls[0];
+const url = defaultChainInfo.rpcUrls[0];
 const { mbti: { abi, address: contractAddress } } = abiAndAddress;
 
 const provider = new ethers.JsonRpcProvider(url);
@@ -33,7 +33,7 @@ export async function POST(request: Request, { params: { address } }: { params: 
 
         const { shortMessage } = error as any;
 
-        if (shortMessage) return new Response(JSON.stringify({ error: shortMessage}), { status: 400 });
+        if (shortMessage) return new Response(JSON.stringify({ error: shortMessage }), { status: 400 });
 
         return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });
     }
