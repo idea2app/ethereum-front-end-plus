@@ -31,6 +31,10 @@ export async function POST(request: Request, { params: { address } }: { params: 
     } catch (error) {
         console.log(error);
 
+        const { shortMessage } = error as any;
+
+        if (shortMessage) return new Response(JSON.stringify({ error: shortMessage}), { status: 400 });
+
         return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });
     }
 }
