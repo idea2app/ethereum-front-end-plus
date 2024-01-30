@@ -74,7 +74,7 @@ export default function Home() {
         {myMbti < 0 && <Button className='w-100' onClick={onClaimMBTI} >Claim MBTI</Button>}
 
         {myMbti >= 0 && <>
-          <Row className='d-flex justify-content-around'>
+          <Row className='justify-content-around'>
             <Col as={Button} xs={5} onClick={onUpdateMBTI}>更新</Col>
             <Col as={Button} variant="danger" xs={5} onClick={onDestroyMBTI}>销毁</Col>
           </Row>
@@ -95,7 +95,7 @@ export default function Home() {
 ```ts
 // ...
   async getRecord(address: string) {
-    const contract = await metaMaskStore.getDaiContract(abiAndAddress.mbti);
+    const contract = await metaMaskStore.getDaiContract(mbtiContractInfo);
 
     const filter = await contract.filters.MBTIUpdated(address);
     const eventLogs = await contract.queryFilter(filter) as EventLog[];
