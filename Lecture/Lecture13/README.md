@@ -16,14 +16,21 @@
 
 ## 功能实现
 
-先在 `/src/models/Mbti.ts` 为 `Mbti` 类添加一个用来获取当前用户 MBti 的 `getMyMBTI` 方法：
+先在 `/src/models/Mbti.ts` 为 `Mbti` 类添加一个用来获取当前用户 MBti 的 `getMyMBTI` 方法，因为 `abiAndAddress.mbti` 反复使用，这里在前面解构：
 
 ```ts
 // ...
+const { mbti: mbtiContractInfo } = abiAndAddress;
+
 class Mbti {
-// ...
+  async claimMBTI(value: number) {
+    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(mbtiContractInfo);
+
+    return mbtiContract.claimMBTI(value);
+  }
+
   async getMyMBTI() {
-    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(abiAndAddress.mbti);
+    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(mbtiContractInfo);
 
     return mbtiContract.getMyMBTI();
   }
@@ -69,7 +76,7 @@ import { convertMbtiToString } from '../utils/mbti';
 export default function Home() {
 // ...
   const handlePageInitRequest = useCallback(async () => {
-    const accounts = await window.ethereum.request<string[]>({
+    const accounts = await window.ethereum?.request<string[]>({
       method: "eth_accounts",
       params: [],
     });
@@ -107,13 +114,13 @@ import { parseEther } from 'ethers';
 class Mbti {
 // ...
   async updateMBTI(mbti: number) {
-    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(abiAndAddress.mbti);
+    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(mbtiContractInfo);
 
     return mbtiContract.updateMBTI(mbti, {value: parseEther("0.001")});
   }
 
   async destroyMBTI() {
-    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(abiAndAddress.mbti);
+    const mbtiContract = await metaMaskStore.getDaiContractWithSigner(mbtiContractInfo);
 
     return mbtiContract.destroyMBTI({value: parseEther("0.001")});
   }
@@ -153,7 +160,7 @@ export default function Home() {
 
         {myMbti < 0 && <Button className='w-100' onClick={onClaimMBTI} >Claim MBTI</Button>}
         {myMbti >= 0 && <>
-          <Row className='d-flex justify-content-around'>
+          <Row className='justify-content-around'>
             <Col as={Button} xs={5} onClick={onUpdateMBTI}>更新</Col>
             <Col as={Button} variant="danger" xs={5} onClick={onDestroyMBTI}>销毁</Col>
           </Row>

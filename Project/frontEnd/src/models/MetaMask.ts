@@ -1,6 +1,6 @@
 import { BrowserProvider, Contract, ethers, JsonRpcSigner } from 'ethers';
 
-import { chainList, defaultChainID } from './ChainInfo';
+import { defaultChainInfo } from './ChainInfo';
 
 interface ContractAddressAndAbi {
   address: string,
@@ -29,26 +29,27 @@ class MetaMask {
     const [account] = (await window.ethereum.request({
       method: 'eth_requestAccounts',
     })) as string[];
+
     return account;
   }
 
-  async switchChain(chainId: string) {
+  async switchChain(chainInfo: Record<string, unknown>) {
     try {
       await window?.ethereum?.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId }],
+        params: [{ chainId: chainInfo.chainId }],
       });
     } catch (switchError: any) {
-      if (switchError.code === 4902) {
-        await window?.ethereum?.request({
+      if (switchError.code === 4902)
+        window?.ethereum?.request({
           method: 'wallet_addEthereumChain',
-          params: chainList,
+          params: [chainInfo],
         });
-      }
     }
   }
 
-  switchDefaultChain = () => this.switchChain(defaultChainID);
+  switchDefaultChain = () =>
+    this.switchChain(defaultChainInfo);
 
   switchDefaultChainAndReload = async () => {
     await this.switchDefaultChain();
