@@ -53,7 +53,7 @@ export default function Home() {
 
     setMyHistory(
       (localStorageAccount ? await mbtiStore.getRecord(localStorageAccount) : [])
-        .map(item => convertMbtiToString(item))
+        .map(item => item >= 0 ? convertMbtiToString(item) : "")
     )
   }, []);
 
@@ -71,6 +71,7 @@ export default function Home() {
     const tx = await mbtiStore.claimMBTI(mbtiSelectValue);
     await tx.wait();
     setMyMbti(mbtiSelectValue);
+    setMyHistory(myHistory => [...myHistory, convertMbtiToString(mbtiSelectValue)])
   }
 
   const onUpdateMBTI = async () => {
@@ -87,6 +88,7 @@ export default function Home() {
     const tx = await mbtiStore.destroyMBTI();
     await tx.wait();
     setMyMbti(-1);
+    setMyHistory(myHistory => [...myHistory, ""])
   }
 
   return (
