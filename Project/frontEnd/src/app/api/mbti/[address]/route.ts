@@ -11,14 +11,22 @@ const contract = new ethers.Contract(contractAddress, abi, provider);
 
 const countMap = new Map<string, number>();
 
+const CustomResponse = (value: any, status = 200) => new Response(JSON.stringify(value), { status });
+
+const ErrorResponse = (error: string | any, status = 400) => CustomResponse({ error }, status);
+
 export async function POST(request: Request, { params: { address } }: { params: { address: string } }) {
-    if (!address) return new Response(JSON.stringify({ error: 'Address parameter is required' }), { status: 404 });
-    if (!/0x[A-Za-z0-9]{40}/.test(address)) return new Response(JSON.stringify({ error: 'Invalid input address' }), { status: 404 });
+    if (!address) return ErrorResponse('Address parameter is required', 404);
+    if (!/0x[A-Za-z0-9]{40}/.test(address)) return ErrorResponse('Invalid input address', 404);
 
     const { searchParams } = new URL(request.url);
     const signature = searchParams.get('signature');
 
-    // todo)) verify signature
+    if (!signature) return ErrorResponse('invalid signature');
+
+    if (address !== ethers.verifyMessage(`${address}-${new Date().toISOString().slice(0, 10)}`, signature)) {
+        return ErrorResponse('illegal signature');
+    }
 
     const count = (countMap.get(address) || 0) + 1;
 
@@ -27,14 +35,14 @@ export async function POST(request: Request, { params: { address } }: { params: 
 
         countMap.set(address, count);
 
-        return new Response(JSON.stringify({ address, value, count }));
-    } catch (error) {
+        return CustomResponse({ address, value, count });
+    } catch (error: any) {
         console.log(error);
 
-        const { shortMessage } = error as any;
+        const { shortMessage } = error;
 
-        if (shortMessage) return new Response(JSON.stringify({ error: shortMessage }), { status: 400 });
+        if (shortMessage) return ErrorResponse(error);
 
-        return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });
+        return ErrorResponse('Not found', 404)
     }
 }
