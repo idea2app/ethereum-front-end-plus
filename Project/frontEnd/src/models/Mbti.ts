@@ -31,13 +31,12 @@ class Mbti {
   }
 
   async getRecord(address: string) {
-    const contract = await metaMaskStore.getDaiContract(mbtiContractInfo);
+    const mbtiContract = await metaMaskStore.getDaiContract(mbtiContractInfo);
 
-    const filter = await contract.filters.MBTIUpdated(address);
-    const eventLogs = await contract.queryFilter(filter) as EventLog[];
+    const filter = await mbtiContract.filters.MBTIUpdated(address);
+    const eventLogs = await mbtiContract.queryFilter(filter) as EventLog[];
 
-    return eventLogs.map(({ args }) => Number((args[1] as BigInt).toString()))
-      .filter(item => item >= 0)
+    return eventLogs.map(({ args }) => Number((args[1] as BigInt).toString()));
   }
 }
 

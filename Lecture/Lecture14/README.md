@@ -29,7 +29,7 @@ const events = await contract.queryFilter(filter)
 
 ## 功能实现
 
-我们先完成 UI 部分，在 `/src/components` 目录下创建 `ClaimHistory.tsx` 文件，创建 `ClaimHistory` 组件，该组件可**正序**传入需要显示列表，该列表是由 MBTI 记录**倒序**排列的（`reversed` 表示顺序列表的编号倒叙排列）：
+我们先完成 UI 部分，在 `/src/components` 目录下创建 `ClaimHistory.tsx` 文件，创建 `ClaimHistory` 组件，该组件可**正序**传入需要显示列表，该列表是由 MBTI 记录**倒序**排列的（`reversed` 表示顺序列表的编号倒叙排列），当记录是空字符串表示销毁操作，当 MBTI 被销毁时显示“销毁”，标号后红色“*”号表示当前的 MBTI：
 
 ```tsx
 import { FC } from "react"
@@ -39,6 +39,8 @@ interface ClaimHistoryProps {
 }
 
 export const ClaimHistory: FC<ClaimHistoryProps> = ({ record }) => {
+  const hasMbtiNow = !!record[record.length - 1];
+
   return <>
     <h2 className="text-center mt-1">历史</h2>
     <ol reversed className="list-unstyled">
@@ -48,9 +50,9 @@ export const ClaimHistory: FC<ClaimHistoryProps> = ({ record }) => {
           <li key={item + index} className="text-center">
             <span className="me-2">
               {arr.length - index}
-              {index === 0 && <sup className="text-danger">*</sup>}.
+              {index === 0 && hasMbtiNow && <sup className="text-danger">*</sup>}.
             </span>
-            {item}
+            {item || "销毁"}
           </li>
         )}
     </ol>
@@ -58,7 +60,7 @@ export const ClaimHistory: FC<ClaimHistoryProps> = ({ record }) => {
 }
 ```
 
-在 `/src/app/page.tsx` 引入该组件，定义 `myHistory` 变量，需要展示的历史记录倒序存储在 `myHistory`，当 `myHistory` 为空数组时组件不显示：
+在 `/src/app/page.tsx` 引入该组件，定义 `myHistory` 变量，需要展示的历史记录顺序存储在 `myHistory`，当 `myHistory` 为空数组时组件不显示：
 
 ```tsx
 // ...
@@ -95,20 +97,19 @@ export default function Home() {
 ```ts
 // ...
   async getRecord(address: string) {
-    const contract = await metaMaskStore.getDaiContract(mbtiContractInfo);
+    const mbtiContract = await metaMaskStore.getDaiContract(mbtiContractInfo);
 
-    const filter = await contract.filters.MBTIUpdated(address);
-    const eventLogs = await contract.queryFilter(filter) as EventLog[];
+    const filter = await mbtiContract.filters.MBTIUpdated(address);
+    const eventLogs = await mbtiContract.queryFilter(filter) as EventLog[];
 
-    return eventLogs.map(({ args }) => Number((args[1] as BigInt).toString()))
-      .filter(item => item >= 0)
+    return eventLogs.map(({ args }) => Number((args[1] as BigInt).toString()));
   }
 // ...
 ```
 
 `contract.filters.MBTIUpdated(address)` 可以创建一个 `MBTIUpdated` 事件的筛选器，该筛选器要求事件的第一个参数是 `address`；`queryFilter` 返回 `EventLog` 对象数组，`EventLog` 的 `args` 是 `MBTIUpdated` 的参数，第二个参数是 MBTI 对应的十进制，销毁 MBTI 时该值为 `-1`。
 
-在页面初始化时添加获取 MBTI 记录的请求，在点击“更新”按钮时，更新 MBTI 记录，在 `/src/app/page.tsx` 修改：
+在页面初始化时添加获取 MBTI 记录的请求，在点击“Claim MBTI”按钮、“更新”按钮和“销毁”按钮时，更新 MBTI 记录，在 `/src/app/page.tsx` 修改：
 
 ```tsx
 // ...
@@ -136,10 +137,17 @@ export default function Home() {
 
     setMyHistory(
       (localStorageAccount ? await mbtiStore.getRecord(localStorageAccount) : [])
-        .map(item => convertMbtiToString(item))
+        .map(item => item >= 0 ? convertMbtiToString(item) : "")
     )
   }, []);
 // ...
+  const onClaimMBTI = async () => {
+    const tx = await mbtiStore.claimMBTI(mbtiSelectValue);
+    await tx.wait();
+    setMyMbti(mbtiSelectValue);
+    setMyHistory(myHistory => [...myHistory, convertMbtiToString(mbtiSelectValue)])
+  }
+
   const onUpdateMBTI = async () => {
     if (mbtiSelectValue === myMbti) return;
 
@@ -149,7 +157,14 @@ export default function Home() {
     setMyMbti(mbtiSelectValue);
     setMyHistory(myHistory => [...myHistory, convertMbtiToString(mbtiSelectValue)])
   }
+
+  const onDestroyMBTI = async () => {
+    const tx = await mbtiStore.destroyMBTI();
+    await tx.wait();
+    setMyMbti(-1);
+    setMyHistory(myHistory => [...myHistory, ""])
+  }
 // ...
 ```
 
-刷新页面，等待请求完成，显示历史记录；更新 MBTI，等待请求完成，历史记录也更新。自此，本节的主要功能就开发完毕了。
+刷新页面，等待请求完成，显示历史记录；销毁 MBIT，等待请求完成，历史记录更新；创建 MBTI 记录，等待请求完成，历史记录更新；更新 MBTI，等待请求完成，历史记录也更新。自此，本节的主要功能就开发完毕了。
