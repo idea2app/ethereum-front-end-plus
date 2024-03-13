@@ -98,7 +98,7 @@ Vercel 支持配置 Node.js 版本（①），目前支持“16.x”、“18.x�
 
 ![Vercel 项目 Node.js 版本设置和 Project ID](./image/vercel_project_nodejs_version_and_project_id.jpg)
 
-Vercel 提供一个 `.varcel.app` 的域名供生产环境使用，也支持自定义域名。Vercel 的域名支持两种绑定形式，一种可以绑定到生产环境（可以通过绑定域名访问生产环境的最新网站）、一种可以绑定到指定的分支（该分支的最新部署的网站可以使用绑定域名访问，使用该功能需要绑定 Git 仓库）。更多关于自定义域名配置的说明请参考 [添加自定义域名的相关文档](https://vercel.com/docs/projects/domains/add-a-domain)。
+Vercel 提供一个 `.vercel.app` 的域名供生产环境使用，也支持自定义域名。Vercel 的域名支持两种绑定形式，一种可以绑定到生产环境（可以通过绑定域名访问生产环境的最新网站）、一种可以绑定到指定的分支（该分支的最新部署的网站可以使用绑定域名访问，使用该功能需要绑定 Git 仓库）。更多关于自定义域名配置的说明请参考 [添加自定义域名的相关文档](https://vercel.com/docs/projects/domains/add-a-domain)。
 
 ![Vercel 项目设置域名设置](./image/vercel_project_domains_settings.jpg)
 
@@ -106,7 +106,7 @@ Vercel 提供一个 `.varcel.app` 的域名供生产环境使用，也支持自�
 
 ![Vercel 项目部署页](./image/vercel_project_deployments_list.png)
 
-当我们点击项目的 Deployments 页面上一个部署的预览链接，可以进入部署的详情页。该页面在项目明右侧增加了部署的 hash，并通过颜色显示该次部署的状态，如下图中 ① 处；② 处展示了部署详情的页面的菜单，其中对部署该项目比较重要的有 Deplayment 和 Source 的部分功能；③ 处显示了该次部署的一些信息，如部署状态、部署环境、构建和部署耗时、域名（预览链接）和 Git 分支及对应 Commit 的信息等，点击 Visit 按钮即可访问该次部署的预览链接。
+当我们点击项目的 Deployments 页面上一个部署的预览链接，可以进入部署的详情页。该页面在项目明右侧增加了部署的 hash，并通过颜色显示该次部署的状态，如下图中 ① 处；② 处展示了部署详情的页面的菜单，其中对部署该项目比较重要的有 Deployment 和 Source 的部分功能；③ 处显示了该次部署的一些信息，如部署状态、部署环境、构建和部署耗时、域名（预览链接）和 Git 分支及对应 Commit 的信息等，点击 Visit 按钮即可访问该次部署的预览链接。
 
 ![Vercel 项目部署详情页预览](./image/vercel_project_deployment_overview.jpg)
 
@@ -122,6 +122,6 @@ Vercel 提供一个 `.varcel.app` 的域名供生产环境使用，也支持自�
 
 前面我们对 Vercel 平台与部署关系比较密切的功能进行说明，接下来我们使用 Vercel 提供的 CLI 工具进行部署。
 
-
+Vercel 的
 
 
