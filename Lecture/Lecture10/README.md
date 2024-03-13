@@ -10,7 +10,7 @@
 
 ## 要点回顾
 
-`wallet_addEthereumChain` 用来向 MataMask 添加网络，其 `params` 的参数为一个对象，对象有如下几个属性是必选： 表示链 ID 的 `chainId`；表示链名称的 `chainName`；表示代币信息的 `nativeCurrency` 对象，它由三个必选属性构成，`decimals`、`name` 和 `symbol`；与链通信的 rpc 节点数组 `rpcUrls`，至少需要一个元素。另外，表示链的 logo 的图标地址数组 `iconUrls` 和区块链浏览器地址数组 `blockExplorerUrls` 是可选的，例如：
+`wallet_addEthereumChain` 用来向 MetaMask 添加网络，其 `params` 的参数为一个对象，对象有如下几个属性是必选： 表示链 ID 的 `chainId`；表示链名称的 `chainName`；表示代币信息的 `nativeCurrency` 对象，它由三个必选属性构成，`decimals`、`name` 和 `symbol`；与链通信的 rpc 节点数组 `rpcUrls`，至少需要一个元素。另外，表示链的 logo 的图标地址数组 `iconUrls` 和区块链浏览器地址数组 `blockExplorerUrls` 是可选的，例如：
 
 ```ts
 window.ethereum.request({

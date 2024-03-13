@@ -95,7 +95,7 @@ await window.ethereum.request({
 
 `eth_accounts` 方法可以用来获取当前 MetaMask 登录的账号地址，和 `eth_requestAccounts` 的使用方法一样，但会以数组形式返回账号地址。
 
-从 `wallet_addEthereumChain` 的文档不难知道，它用来向 MataMask 添加网络，其 `params` 的参数为一个对象，对象有如下几个属性是必选： 表示链 ID 的 `chainId`；表示链名称的 `chainName`；表示代币信息的 `nativeCurrency` 对象，它由三个必选属性构成，`decimals`、`name` 和 `symbol`；与链通信的 rpc 节点数组 `rpcUrls`，至少需要一个元素。另外，表示链的 logo 的图标地址数组 `iconUrls` 和区块链浏览器地址数组 `blockExplorerUrls` 是可选的。
+从 `wallet_addEthereumChain` 的文档不难知道，它用来向 MetaMask 添加网络，其 `params` 的参数为一个对象，对象有如下几个属性是必选： 表示链 ID 的 `chainId`；表示链名称的 `chainName`；表示代币信息的 `nativeCurrency` 对象，它由三个必选属性构成，`decimals`、`name` 和 `symbol`；与链通信的 rpc 节点数组 `rpcUrls`，至少需要一个元素。另外，表示链的 logo 的图标地址数组 `iconUrls` 和区块链浏览器地址数组 `blockExplorerUrls` 是可选的。
 
 在 Demo2 的 `index.html` 文件中，可以在 `登录` 按钮下添加一个新的按钮：`<button onclick="addEthereumChainHandler()">添加新网络</button>`；在 `loginHandler` 下添加 `addEthereumChainHandler` 方法：
 

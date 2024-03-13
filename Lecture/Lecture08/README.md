@@ -190,7 +190,7 @@ export default function RootLayout({
 }
 ```
 
-我们可以简化 `/src/app/page.tsx`，去掉在本项目中无用的代码，引入 `react-bootstrap`，因为没有使用 `page.module.css` 文件中的类，也可以将相关代码删除。为了验证 `react-bootstra` 是否引入成功，我们引入 `Container` 组件，并将其 `html` 标签设为 `main`；为页面添加 `h1` 标题，内容为 `MBTI`，并使其文字水平居中（`text-center`），上下留出适当的空间，代码如下：
+我们可以简化 `/src/app/page.tsx`，去掉在本项目中无用的代码，引入 `react-bootstrap`，因为没有使用 `page.module.css` 文件中的类，也可以将相关代码删除。为了验证 `react-bootstrap` 是否引入成功，我们引入 `Container` 组件，并将其 `html` 标签设为 `main`；为页面添加 `h1` 标题，内容为 `MBTI`，并使其文字水平居中（`text-center`），上下留出适当的空间，代码如下：
 
 ```tsx
 import { Container } from "react-bootstrap";
