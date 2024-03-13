@@ -65,7 +65,7 @@ await window.ethereum.request({
 
 | `method` | 功能 | `params` 参数 |
 | :-- | :-- | :-- |
-| `wallet_addEthereumChain` | 向 MataMask 添加网络 | 一个对象，对象有如下几个属性是必选： 表示链 ID 的 `chainId`；表示链名称的 `chainName`；表示代币信息的 `nativeCurrency` 对象，它由三个必选属性构成，`decimals`、`name` 和 `symbol`；与链通信的 rpc 节点数组 `rpcUrls`，至少需要一个元素。另外，表示链的 logo 的图标地址数组 `iconUrls` 和区块链浏览器地址数组 `blockExplorerUrls` 是可选的。|
+| `wallet_addEthereumChain` | 向 MetaMask 添加网络 | 一个对象，对象有如下几个属性是必选： 表示链 ID 的 `chainId`；表示链名称的 `chainName`；表示代币信息的 `nativeCurrency` 对象，它由三个必选属性构成，`decimals`、`name` 和 `symbol`；与链通信的 rpc 节点数组 `rpcUrls`，至少需要一个元素。另外，表示链的 logo 的图标地址数组 `iconUrls` 和区块链浏览器地址数组 `blockExplorerUrls` 是可选的。|
 | `wallet_switchEthereumChain` | 用于切换链 | 传入一个含有 `chainId` 的对象可以切换到指定链 |
 | `wallet_requestPermissions` | 用于于授权 | 可不传参数 |
 | `eth_accounts` | 获取当前 MetaMask 登录的账号地址 | 空数组 |
