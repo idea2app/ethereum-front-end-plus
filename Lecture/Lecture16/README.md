@@ -122,6 +122,176 @@ Vercel 提供一个 `.vercel.app` 的域名供生产环境使用，也支持自�
 
 前面我们对 Vercel 平台与部署关系比较密切的功能进行说明，接下来我们使用 Vercel 提供的 CLI 工具进行部署。
 
-Vercel 的
+Vercel 的 CLI 工具是基于 Node.js 环境的 npm 包，使用 npm 的安装方法如下：
 
+```bash
+npm i -g vercel@latest
+```
 
+如果习惯使用其他包管理工具，可以使用对应工具的全局安装命令安装 `vercel` 包的最新版。
+
+`vercel login` 可以用来登录，执行该命令后，工具会提示目前 Vercel 提供如下方式登录命令行工具：
+
+- GitHub 第三方登录
+- GitLab 第三方登录
+- Bitbucket 第三方登录
+- Email 验证登录
+- 单点登录（主要适用于团队账户）
+
+可以选择对应的方式，按提示在命令行登录。
+
+`vercel whoami` 可以用来查看当前登录账户的 username，如果当前命令行工具没有登录，则执行 `vercel login`。
+
+`vercel logout` 主要用于登出账号。
+
+接下来我们来进行项目部署，在项目根文件夹打开命令行，执行如下命令：
+
+```bash
+vercel
+```
+
+如果当前命令行未登录，程序将提示登录，我们登录后正式进入部署配置：
+
+询问是否部署指定文件夹的项目，输入 `Y` 并回车。
+
+```bash
+? Set up and deploy “.../project-dir”?  [Y/n] y
+```
+
+选择部署到哪个 scope, 选中并回车（一般情况只有自己的账户）。
+
+```bash
+? Which scope do you want to deploy to? XXXXX
+```
+
+是否部署到已经存在的项目，我们需要部署到一个新项目，输入 `N` 并回车。
+```bash
+? Link to existing project? [y/N] N
+```
+
+我们需要为新项目取一个名字，输入项目名并回车。
+
+```bash
+? What’s your project’s name? XXXX
+```
+
+代码位于哪个目录下？我们保持默认当前文件夹就好，回车。
+
+```bash
+? In which directory is your code located? ./
+```
+
+这里提示我们是否修改默认的构建命令（Build Command）、开发命令（Development Command）、安装命令（Install Command）和输出目录（Output Directory），这里我们可以保持默认配置，输入 `N` 并回车。
+
+```bash
+Auto-detected Project Settings (Next.js):
+- Build Command: next build
+- Development Command: next dev --port $PORT
+- Install Command: `yarn install`, `pnpm install`, `npm install`, or `bun install`
+- Output Directory: Next.js default
+? Want to modify these settings? [y/N] n
+```
+
+项目开始部署，我们需要耐心等待，当程序答应如下信息，说明部署成功：
+
+```bash
+📝  To deploy to production (xxxxx.vercel.app), run `vercel --prod`
+```
+
+我们可以访问 Vercel 查看刚才创建并部署的项目，查看预览效果。如果需要将这个部署发布到生产环境，可以执行 `vercel --prod`。
+
+我们会发现，此时项目根文件夹创建了一个名为 `.vercel` 的文件夹，里面有一个 `project.json`，的文件，该文件内说明了该项目的在 vercel 的 `orgId`（前面介绍的 Vercel ID） 和 `projectId`（前面介绍的 Project ID），下次执行部署命令，命令行会自动读取该配置文件的信息，自动将项目部署到对应的 Vercel 项目，免去前面繁琐的部署配置，同时我们注意到，`.vercel` 被添加到 `.gitignore`，Vercel 并不推荐将 `.vercel` 文件夹中的内容提交到 Git 仓库。
+
+这里只介绍了 Vercel 命令行工具的基本使用方式，更多命令行的使用说明请参考 [Vercel 文档关于 CLI 的部分](https://vercel.com/docs/cli)。
+
+### 使用 GitHub Action 完成自动部署
+
+前面介绍了 Vercel 的手动部署，如果可以对项目持续集成就好了，Vercel 官方提供了相关的 API，有开发者根据 API 开发了 GitHub Action，我们可以利用该 Action 来对项目进行持续集成。相关 Action 有很多，这里使用 Star 最多，年份相对较长的 [amondnet/vercel-action](https://github.com/amondnet/vercel-action)。关于 GitHub Action 的更多内容请参看 [相关文档](https://docs.github.com/en/actions/quickstart)。
+
+下面是一个简单的例子，我们可以在根目录下创建一个 `.github/workflows` 目录，并在其中创建一个以 `.yml` 或 `.yaml` 为拓展名的文件，将下面内容添加到文件中，如果该文件被推送到 GitHub，并为该仓库 [配置好 GitHub Action Secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository)，每次有新代码被推送到 GitHub 仓库，都会被部署到 Vercel 的环境。
+
+```yml
+name: deploy website
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}  #Required
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required 
+          vercel-args: '--prod' #Optional
+```
+
+`amondnet/vercel-action` 这个 Action 需要传入多个参数，`vercel-token`（Vercel token）、`vercel-org-id`（Vercel ID）和 `vercel-project-id`（Project ID）是必传参数，前面已经介绍了这些参数的获取方法，因为这些参数带有私密性质，所以不能直接写在配置文件中，GitHub 为 GitHub Action 提供了添加仓库级私钥的方法，可以 [参考文档](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository)，如果我们配置的私钥名是 `VERCEL_TOKEN`，在配置文件中就需要使用 `secrets.VERCEL_TOKEN` 来引用，`GITHUB_TOKEN` 是一个特殊的私钥，GitHub 在运行 Action 时会自动向系统注入该密钥，可以直接使用，无需配置。`vercel-args` 可以配置命令 Vercel CLI 执行时的参数，这里的配置的 `--prod`，相当于会执行 `vercel --prod` 命令，将代码直接部署到圣餐环境，更多参数，可以参看 [amondnet/vercel-action 的说明](https://github.com/amondnet/vercel-action)。
+
+前面的的例子还有些问题，一是如果项目没有填写私钥，GitHub Action 也会执行部署到 Vercel，这会导致 GitHub Action 资源的浪费；二是如果在实际工作中，并不希望所有分支的最新代码部署到生产环境，只希望主分支的最新代码署到生产环境。为了解决这个问题，我们可以将 Action 拆分成两个：
+
+```yml
+name: deploy website to production
+on:
+  push:
+    branches:
+      - main
+jobs:
+  Build-and-Deploy:
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        if: ${{ env.VERCEL_TOKEN && env.VERCEL_ORG_ID && env.VERCEL_PROJECT_ID }}
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        if: ${{ env.VERCEL_TOKEN && env.VERCEL_ORG_ID && env.VERCEL_PROJECT_ID }}
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
+          vercel-args: --prod
+```
+
+```yml
+name: Pull Request
+on:
+  push:
+    branches-ignore:
+      - main
+jobs:
+  Build-and-Deploy:
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        if: ${{ env.VERCEL_TOKEN && env.VERCEL_ORG_ID && env.VERCEL_PROJECT_ID }}
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        if: ${{ env.VERCEL_TOKEN && env.VERCEL_ORG_ID && env.VERCEL_PROJECT_ID }}
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
+```
+
+这里我们将密钥读取到环境变量，如果存在密钥缺失将不执行该 Action；在主分支 push 代码会将该分支的代码部署到生产环境，否则只是进行普通的部署，方便预览。
+
+到这里，本节内容就介绍完了，我们简单介绍了常见的部署方案，并相对详细地介绍了将项目部署到 Vercel，希望能给大家带来一些收获。
