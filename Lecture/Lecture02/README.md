@@ -218,4 +218,12 @@ MetaMask 会自动弹出切换到新网络的确认请求，可以根据需要�
 
 ![MetaMask 交易确认系统提示](./image/metamask_transaction_confirmation_system_prompt.jpg)
 
+当交易被创建，点击首页的活动 Tab （如下图 ① 处），也可以查看交易列表（如下图 ② 处）。交易列表展示了交易时间、交易类型、交易金额等信息，点击列表中的任意一条交易，可以显示更详细的有关交易的信息。
+
+![MetaMask 首页活动 Tab](./image/metamask_home_activity.jpg)
+
+交易详情（如下图）展示了交易类型、状态、交易 ID、区块链浏览器链接、交易账户、交易金额等重要信息，点击底部的活动日志还可以查看完成该交易的时间线。
+
+![MetaMask 首页交易详情](./image/metamask_home_transaction_details.jpg)
+
 本节我们简单介绍了 MetaMask 的使用方法，感谢大家。
