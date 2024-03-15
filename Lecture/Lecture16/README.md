@@ -1,18 +1,20 @@
-# 项目部署
+# 第十六讲 将项目部署到 Vercel
 
 前面我们完成了项目的代码部分，接下来我们对项目进行部署。
 
-## 常见的前端部署方案
+## 常见的前端部署云服务方案
 
 过去，我们部署一个纯前端项目需要自己启动一个静态服务器，并把打包好的前端项目上传到静态服务器的指定文件夹。随着云技术的发展，越来越多的云平台改变了原来繁琐的工作流程，使得部署工作变得简单高效。
 
-我们常见的前端部署方案有：
+我们常见的前端部署云服务方案有：
 
 - [Netlify](https://www.netlify.com/)：个提供静态资源网络托管的综合平台，提供 CI 服务，能够将托管 GitHub，GitLab 等网站上的 Jekyll，Hexo，Hugo 等代码自动编译并生成静态网站。
 
 - [Vercel](https://vercel.com/)：Vercel的前端云为开发人员提供体验和基础设施，以构建、扩展和保护更快、更个性化的网络。
 
 - [Cloudflare Page](https://pages.cloudflare.com/)：CloudFlare Pages 是一个 JAMstack 平台，供前端开发者协作和部署网站。
+
+- [GitHub Pages](https://pages.github.com/)： 一个免费的静态网站托管服务，允许用户从 GitHub 仓库直接托管和发布静态网页。
 
 ## 使用 Vercel 部署项目
 
