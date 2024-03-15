@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { ethers, getAddress } from 'ethers';
 
 import { abiAndAddress } from '../../../../models/AbiAndAddress'
 import { defaultChainInfo } from '../../../../models/ChainInfo'
@@ -15,34 +15,46 @@ const CustomResponse = (value: any, status = 200) => new Response(JSON.stringify
 
 const ErrorResponse = (error: string | any, status = 400) => CustomResponse({ error }, status);
 
-export async function POST(request: Request, { params: { address } }: { params: { address: string } }) {
+const checkAddress = (address?: string) => {
     if (!address) return ErrorResponse('Address parameter is required', 404);
     if (!/^0[xX][0-9a-fA-F]{40}$/.test(address)) return ErrorResponse('Invalid input address', 404);
+}
 
-    const { searchParams } = new URL(request.url);
-    const signature = searchParams.get('signature');
-
-    if (!signature) return ErrorResponse('invalid signature');
-
-    if (address !== ethers.verifyMessage(`${address}-${new Date().toISOString().slice(0, 10)}`, signature)) {
-        return ErrorResponse('illegal signature');
-    }
-
-    const count = (countMap.get(address) || 0) + 1;
+export async function POST(request: Request, { params: { address } }: { params: { address: string } }) {
+    const checkResult = checkAddress(address);
+    if(checkResult) return checkResult;
 
     try {
-        const value = Number(await contract.getMBTI(address));
+        const normalizedAddress = getAddress(address);
+        const { signature, myAddress } = await request.json();
 
-        countMap.set(address, count);
+        if (!signature) return ErrorResponse('invalid signature');
+        if (getAddress(myAddress) !== ethers.verifyMessage(normalizedAddress, signature))
+            return ErrorResponse('illegal signature');
 
-        return CustomResponse({ address, value, count });
+        const value = Number(await contract.getMBTI(normalizedAddress));
+
+        const count = (countMap.get(normalizedAddress) || 0) + 1;
+        countMap.set(normalizedAddress, count);
+
+        return CustomResponse({ address: normalizedAddress, value });
     } catch (error: any) {
-        console.log(error);
+        console.error(error);
 
         const { shortMessage } = error;
-
         if (shortMessage) return ErrorResponse(error);
 
         return ErrorResponse('Not found', 404)
     }
+}
+
+export async function GET(_: Request, { params: { address } }: { params: { address: string } }) {
+    const checkResult = checkAddress(address);
+    if(checkResult) return checkResult;
+
+    const normalizedAddress = getAddress(address);
+
+    const count = countMap.get(normalizedAddress) || 0;
+
+    return CustomResponse({ count });
 }
