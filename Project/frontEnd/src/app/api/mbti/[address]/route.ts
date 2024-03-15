@@ -17,7 +17,7 @@ const ErrorResponse = (error: string | any, status = 400) => CustomResponse({ er
 
 export async function POST(request: Request, { params: { address } }: { params: { address: string } }) {
     if (!address) return ErrorResponse('Address parameter is required', 404);
-    if (!/0x[A-Za-z0-9]{40}/.test(address)) return ErrorResponse('Invalid input address', 404);
+    if (!/^0[xX][0-9a-fA-F]{40}$/.test(address)) return ErrorResponse('Invalid input address', 404);
 
     const { searchParams } = new URL(request.url);
     const signature = searchParams.get('signature');
