@@ -1,4 +1,4 @@
-import { ethers, getAddress } from 'ethers';
+import { ethers, getAddress, verifyMessage } from 'ethers';
 
 import { abiAndAddress } from '../../../../models/AbiAndAddress'
 import { defaultChainInfo } from '../../../../models/ChainInfo'
@@ -29,7 +29,7 @@ export async function POST(request: Request, { params: { address } }: { params: 
         const { signature, myAddress } = await request.json();
 
         if (!signature) return ErrorResponse('invalid signature');
-        if (getAddress(myAddress) !== ethers.verifyMessage(normalizedAddress, signature))
+        if (getAddress(myAddress) !== verifyMessage(normalizedAddress, signature))
             return ErrorResponse('illegal signature');
 
         const value = Number(await contract.getMBTI(normalizedAddress));
