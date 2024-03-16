@@ -148,32 +148,27 @@ import mbtiStore from '../models/Mbti';
 接下来，进行后端 API 开发，在 `/src/app/api/mbti/[address]` 目录下创建 `route.ts` 文件，该文件内创建了两个函数——`POST` 和 `GET`，表示可以向 `/api/mbti/[address]` 发送 `POST` 和 `GET` 请求，并触发对应的函数，地址的 `[address]` 需要替换成被查询的账户地址，`countMap` 主要记录每个账户被查询的次数。`POST` 请求主要用于查询账户的 MBTI，需要在 `body` 附带签名结果 `signature` 和发送请求的账户地址 `myAddress`，`[address]` 是被查询 MBTI 的账户地址；`GET` 请求用于查询账户被查询的次数，`[address]` 是账户地址。Next.js 要求后端处理函数都需要返回 `Response` 实例。在 `POST` 请求中，签名验证的内容，和前端一致，是被查询的账户地址，并且需要标准化。代码如下：
 
 ```ts
-import { ethers, getAddress, verifyMessage } from "ethers";
+import { ethers, getAddress, verifyMessage } from 'ethers';
 
-import { abiAndAddress } from "../../../../models/AbiAndAddress";
-import { defaultChainInfo } from "../../../../models/ChainInfo";
+import { abiAndAddress } from '../../../../models/AbiAndAddress';
+import { defaultChainInfo } from '../../../../models/ChainInfo';
 
 const url = defaultChainInfo.rpcUrls[0];
-const {
-  mbti: { abi, address: contractAddress },
-} = abiAndAddress;
+const { mbti: { abi, address: contractAddress } } = abiAndAddress;
 
 const provider = new ethers.JsonRpcProvider(url);
 const contract = new ethers.Contract(contractAddress, abi, provider);
 
 const countMap = new Map<string, number>();
 
-const CustomResponse = (value: any, status = 200) =>
-  new Response(JSON.stringify(value), { status });
+const CustomResponse = (value: any, status = 200) => new Response(JSON.stringify(value), { status });
 
-const ErrorResponse = (error: string | any, status = 400) =>
-  CustomResponse({ error }, status);
+const ErrorResponse = (error: string | any, status = 400) => CustomResponse({ error }, status);
 
 const checkAddress = (address?: string) => {
-  if (!address) return ErrorResponse("Address parameter is required", 404);
-  if (!/^0[xX][0-9a-fA-F]{40}$/.test(address))
-    return ErrorResponse("Invalid input address", 404);
-};
+  if (!address) return ErrorResponse('Address parameter is required', 404);
+  if (!/^0[xX][0-9a-fA-F]{40}$/.test(address)) return ErrorResponse('Invalid input address', 404);
+}
 
 export async function POST(
   request: Request,
@@ -186,9 +181,9 @@ export async function POST(
     const normalizedAddress = getAddress(address);
     const { signature, myAddress } = await request.json();
 
-    if (!signature) return ErrorResponse("invalid signature");
+    if (!signature) return ErrorResponse('invalid signature');
     if (getAddress(myAddress) !== verifyMessage(normalizedAddress, signature))
-      return ErrorResponse("illegal signature");
+      return ErrorResponse('illegal signature');
 
     const value = Number(await contract.getMBTI(normalizedAddress));
 
@@ -202,23 +197,33 @@ export async function POST(
     const { shortMessage } = error;
     if (shortMessage) return ErrorResponse(error);
 
-    return ErrorResponse("Not found", 404);
+    return ErrorResponse('Not found', 404);
   }
 }
 
-export async function GET(
+export function GET(
   _: Request,
   { params: { address } }: { params: { address: string } }
 ) {
   const checkResult = checkAddress(address);
   if (checkResult) return checkResult;
 
-  const normalizedAddress = getAddress(address);
+  try {
+    const normalizedAddress = getAddress(address);
 
-  const count = countMap.get(normalizedAddress) || 0;
+    const count = countMap.get(normalizedAddress) || 0;
 
-  return CustomResponse({ count });
+    return CustomResponse({ count });
+  } catch (error: any) {
+    console.error(error);
+
+    const { shortMessage } = error;
+    if (shortMessage) return ErrorResponse(error);
+
+    return ErrorResponse('Not found', 404);
+  }
 }
+
 ```
 
 我们可以用上一步打印的结果，使用 API 调试工具进行调试。
@@ -261,15 +266,14 @@ export async function GET(
     setSearchMbti(convertMbtiToString(value));
   }
 // ...
-            <Col as={Button} variant="danger" xs={5} onClick={onDestroyMBTI}>销毁</Col>
-          </Row>
-
-          <p>您被围观 {viewTime} 次 MBTI</p>
-
           <Card body className='fs-1 bg-warning-subtle text-center mt-3 mb-5 shadow'>
             {convertMbtiToString(myMbti)}
           </Card>
         </>}
+
+        <p>您被围观 {viewTime} 次 MBTI</p>
+
+        {myHistory.length > 0 && <ClaimHistory record={myHistory} />}
 // ...
 ```
 

@@ -137,12 +137,12 @@ export default function Home() {
             <Col as={Button} variant="danger" xs={5} onClick={onDestroyMBTI}>销毁</Col>
           </Row>
 
-          <p>您被围观 {viewTime} 次 MBTI</p>
-
           <Card body className='fs-1 bg-warning-subtle text-center mt-3 mb-5 shadow'>
             {convertMbtiToString(myMbti)}
           </Card>
         </>}
+
+        <p>您被围观 {viewTime} 次 MBTI</p>
 
         {myHistory.length > 0 && <ClaimHistory record={myHistory} />}
 
