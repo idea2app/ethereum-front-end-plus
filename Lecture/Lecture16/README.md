@@ -8,9 +8,9 @@
 
 我们常见的前端部署云服务方案有：
 
-- [Netlify](https://www.netlify.com/)：个提供静态资源网络托管的综合平台，提供 CI 服务，能够将托管 GitHub，GitLab 等网站上的 Jekyll，Hexo，Hugo 等代码自动编译并生成静态网站。
+- [Netlify](https://www.netlify.com/)：个提供静态资源网络托管的综合平台，提供 CI 服务，能够将托管 GitHub、GitLab 等网站上的 Jekyll、Hexo、Hugo 等代码自动编译并生成静态网站。
 
-- [Vercel](https://vercel.com/)：Vercel的前端云为开发人员提供体验和基础设施，以构建、扩展和保护更快、更个性化的网络。
+- [Vercel](https://vercel.com/)：Vercel 的前端云为开发人员提供体验和基础设施，以构建、扩展和保护更快、更个性化的网络。
 
 - [Cloudflare Page](https://pages.cloudflare.com/)：CloudFlare Pages 是一个 JAMstack 平台，供前端开发者协作和部署网站。
 
