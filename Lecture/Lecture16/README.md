@@ -200,7 +200,45 @@ Auto-detected Project Settings (Next.js):
 📝  To deploy to production (xxxxx.vercel.app), run `vercel --prod`
 ```
 
+### 适配 Vercel 的修改
+
+在上一步中，我们部署我们的程序，发现发生异常，在 Vercel 的 log 中发现如下信息：
+
+```log
+Type error: Property 'toReversed' does not exist on type 'string[]'. Did you mean 'reverse'?
+```
+
+我们需要修改部分涉及 `toReversed` 的代码，在 `/src/components/ClaimHistory.tsx` 中修改，定义 `reversedArr` 函数，将 `record.toReversed()` 替换成 `reversedArr(record)`：
+
+```tsx
+export const ClaimHistory: FC<ClaimHistoryProps> = ({ record }) => {
+  const hasMbtiNow = !!record[record.length - 1]
+
+  const reversedArr = (arr: string[]) => [...arr].reverse();
+
+  return <>
+    <h2 className="text-center mt-1">历史</h2>
+    <ol reversed className="list-unstyled">
+      {reversedArr(record)
+        .map((item, index, arr) => <li key={index} className="text-center">
+          <span className="me-2">
+            {arr.length - index}
+            {index === 0 && hasMbtiNow && <sup className="text-danger">*</sup>}.
+          </span>
+          {item || "销毁"}
+        </li>)}
+    </ol>
+  </>
+}
+```
+
+再次执行 `vercel` 部署。
+
+### 使用 Vercel CLI 部署到生产环境
+
 我们可以访问 Vercel 查看刚才创建并部署的项目，查看预览效果。如果需要将这个部署发布到生产环境，可以执行 `vercel --prod`。
+
+### 使用 Vercel CLI 部署的一个细节
 
 我们会发现，此时项目根文件夹创建了一个名为 `.vercel` 的文件夹，里面有一个 `project.json`，的文件，该文件内说明了该项目的在 vercel 的 `orgId`（前面介绍的 Vercel ID） 和 `projectId`（前面介绍的 Project ID），下次执行部署命令，命令行会自动读取该配置文件的信息，自动将项目部署到对应的 Vercel 项目，免去前面繁琐的部署配置，同时我们注意到，`.vercel` 被添加到 `.gitignore`，Vercel 并不推荐将 `.vercel` 文件夹中的内容提交到 Git 仓库。
 
