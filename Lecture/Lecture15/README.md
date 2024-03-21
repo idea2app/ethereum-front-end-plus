@@ -42,7 +42,7 @@ const signature = await signer.signMessage(MESSAGE);
 const address = verifyMessage(MESSAGE, signature);
 ```
 
-可以通过 `signer` 实例上的 `signMessage` 方法进行签名，需要给它传入需要签名的字符串，返回签名结果 hash；ethers.js 为我们提供了 `verifyMessage` 方法，该方法需要传入待签名的字符串和签名后的结果，返回为得到该签名结果提供私钥的账户地址。
+可以通过 `signer` 实例上的 `signMessage` 方法进行签名，需要给它传入需要签名的字符串，返回签名结果 hash；ethers.js 为我们提供了 `verifyMessage` 方法，该方法需要传入待签名的字符串和签名后的结果，返回为得到该签名结果提供私钥的账户地址。需要注意的是，签名结果泄露可能产生风险，请注意保密。
 
 ## 功能实现
 
@@ -194,8 +194,8 @@ export async function POST(
   } catch (error: any) {
     console.error(error);
 
-    const { shortMessage } = error;
-    if (shortMessage) return ErrorResponse(error);
+    const { message } = error as Error;
+    if (message) return ErrorResponse(message);
 
     return ErrorResponse('Not found', 404);
   }
@@ -217,8 +217,8 @@ export function GET(
   } catch (error: any) {
     console.error(error);
 
-    const { shortMessage } = error;
-    if (shortMessage) return ErrorResponse(error);
+    const { message } = error as Error;
+    if (message) return ErrorResponse(message);
 
     return ErrorResponse('Not found', 404);
   }
