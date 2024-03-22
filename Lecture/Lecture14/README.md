@@ -41,11 +41,12 @@ interface ClaimHistoryProps {
 export const ClaimHistory: FC<ClaimHistoryProps> = ({ record }) => {
   const hasMbtiNow = !!record[record.length - 1];
 
+  const reversedArr = (arr: string[]) => [...arr].reverse();
+
   return <>
     <h2 className="text-center mt-1">历史</h2>
     <ol reversed className="list-unstyled">
-      {record
-        ?.toReversed()
+      {reversedArr(record)
         .map((item, index, arr) =>
           <li key={item + index} className="text-center">
             <span className="me-2">
