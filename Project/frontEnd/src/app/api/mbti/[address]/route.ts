@@ -1,7 +1,7 @@
-import { ethers } from 'ethers';
+import { ethers, getAddress, verifyMessage } from 'ethers';
 
-import { abiAndAddress } from '../../../../models/AbiAndAddress'
-import { defaultChainInfo } from '../../../../models/ChainInfo'
+import { abiAndAddress } from '../../../../models/AbiAndAddress';
+import { defaultChainInfo } from '../../../../models/ChainInfo';
 
 const url = defaultChainInfo.rpcUrls[0];
 const { mbti: { abi, address: contractAddress } } = abiAndAddress;
@@ -15,34 +15,61 @@ const CustomResponse = (value: any, status = 200) => new Response(JSON.stringify
 
 const ErrorResponse = (error: string | any, status = 400) => CustomResponse({ error }, status);
 
-export async function POST(request: Request, { params: { address } }: { params: { address: string } }) {
-    if (!address) return ErrorResponse('Address parameter is required', 404);
-    if (!/0x[A-Za-z0-9]{40}/.test(address)) return ErrorResponse('Invalid input address', 404);
+const checkAddress = (address?: string) => {
+  if (!address) return ErrorResponse('Address parameter is required', 404);
+  if (!/^0[xX][0-9a-fA-F]{40}$/.test(address)) return ErrorResponse('Invalid input address', 404);
+}
 
-    const { searchParams } = new URL(request.url);
-    const signature = searchParams.get('signature');
+export async function POST(
+  request: Request,
+  { params: { address } }: { params: { address: string } }
+) {
+  const checkResult = checkAddress(address);
+  if (checkResult) return checkResult;
+
+  try {
+    const normalizedAddress = getAddress(address);
+    const { signature, myAddress } = await request.json();
 
     if (!signature) return ErrorResponse('invalid signature');
+    if (getAddress(myAddress) !== verifyMessage(normalizedAddress, signature))
+      return ErrorResponse('illegal signature');
 
-    if (address !== ethers.verifyMessage(`${address}-${new Date().toISOString().slice(0, 10)}`, signature)) {
-        return ErrorResponse('illegal signature');
-    }
+    const value = Number(await contract.getMBTI(normalizedAddress));
 
-    const count = (countMap.get(address) || 0) + 1;
+    const count = (countMap.get(normalizedAddress) || 0) + 1;
+    countMap.set(normalizedAddress, count);
 
-    try {
-        const value = Number(await contract.getMBTI(address));
+    return CustomResponse({ address: normalizedAddress, value });
+  } catch (error: any) {
+    console.error(error);
 
-        countMap.set(address, count);
+    const { message } = error as Error;
+    if (message) return ErrorResponse(message);
 
-        return CustomResponse({ address, value, count });
-    } catch (error: any) {
-        console.log(error);
+    return ErrorResponse('Not found', 404);
+  }
+}
 
-        const { shortMessage } = error;
+export function GET(
+  _: Request,
+  { params: { address } }: { params: { address: string } }
+) {
+  const checkResult = checkAddress(address);
+  if (checkResult) return checkResult;
 
-        if (shortMessage) return ErrorResponse(error);
+  try {
+    const normalizedAddress = getAddress(address);
 
-        return ErrorResponse('Not found', 404)
-    }
+    const count = countMap.get(normalizedAddress) || 0;
+
+    return CustomResponse({ count });
+  } catch (error: any) {
+    console.error(error);
+
+    const { message } = error as Error;
+    if (message) return ErrorResponse(message);
+
+    return ErrorResponse('Not found', 404);
+  }
 }
