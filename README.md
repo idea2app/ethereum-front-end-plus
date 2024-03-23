@@ -49,23 +49,23 @@ ethereum-front-end-plus/
 
 |  讲次  | 课程名 | 课程文件目录 | PPT文件目录 |
 |:------:|:------|:------|:------|
-|  1    | 进入区块链世界 | [查看课程文件](/Lecture01/README.md) | [查看PPT](/Slides/Lecture01.pdf) |
-|  2    | 一种广泛使用的以太坊区块链钱包——MetaMask | [查看课程文件](/Lecture02/README.md) | [查看PPT](/Slides/Lecture02.pdf) |
-|  3    | 使用 JavaScript 访问 MetaMask | [查看课程文件](/Lecture03/README.md) | [查看PPT](/Slides/Lecture03.pdf) |
-|  4    | 使用 ethers.js 和区块链交互（上） | [查看课程文件](/Lecture04/README.md) | [查看PPT](/Slides/Lecture04.pdf) |
-|  5    | 使用 ethers.js 和区块链交互（下） | [查看课程文件](/Lecture05/README.md) | [查看PPT](/Slides/Lecture05.pdf) |
-|  6    | 相关工具/应用简介 | [查看课程文件](/Lecture06/README.md) | [查看PPT](/Slides/Lecture06.pdf) |
-|  7    | 需求分析和数据模型分析 | [查看课程文件](/Lecture07/README.md) | [查看PPT](/Slides/Lecture07.pdf) |
-|  8    | 初始化项目及框架搭建 | [查看课程文件](/Lecture08/README.md) | [查看PPT](/Slides/Lecture08.pdf) |
-|  9    | MetaMask 登录及事件监听 | [查看课程文件](/Lecture09/README.md) | [查看PPT](/Slides/Lecture09.pdf) |
-|  10   | MetaMask 网络验证 | [查看课程文件](/Lecture10/README.md) | [查看PPT](/Slides/Lecture10.pdf) |
-|  11   | 区块链应用前端退出 | [查看课程文件](/Lecture11/README.md) | [查看PPT](/Slides/Lecture11.pdf) |
-|  12   | 创建 MBTI 记录 | [查看课程文件](/Lecture12/README.md) | [查看PPT](/Slides/Lecture12.pdf) |
-|  13   | 查看、更新、销毁 MBTI 卡片 | [查看课程文件](/Lecture13/README.md) | [查看PPT](/Slides/Lecture13.pdf) |
-|  14   | MBTI 历史显示 | [查看课程文件](/Lecture14/README.md) | [查看PPT](/Slides/Lecture14.pdf) |
-|  15   | 查询其他用户的 MBTI | [查看课程文件](/Lecture15/README.md) | [查看PPT](/Slides/Lecture15.pdf) |
-|  16   | 将项目部署到 Vercel | [查看课程文件](/Lecture16/README.md) | [查看PPT](/Slides/Lecture16.pdf) |
-|  17   | 课程总结 | [查看课程文件](/Lecture17/README.md) | [查看PPT](/Slides/Lecture17.pdf) |
+|  1    | 进入区块链世界 | [查看课程文件](/Lecture/Lecture01/README.md) | [查看PPT](/Slides/Lecture01.pdf) |
+|  2    | 一种广泛使用的以太坊区块链钱包——MetaMask | [查看课程文件](/Lecture/Lecture02/README.md) | [查看PPT](/Slides/Lecture02.pdf) |
+|  3    | 使用 JavaScript 访问 MetaMask | [查看课程文件](/Lecture/Lecture03/README.md) | [查看PPT](/Slides/Lecture03.pdf) |
+|  4    | 使用 ethers.js 和区块链交互（上） | [查看课程文件](/Lecture/Lecture04/README.md) | [查看PPT](/Slides/Lecture04.pdf) |
+|  5    | 使用 ethers.js 和区块链交互（下） | [查看课程文件](/Lecture/Lecture05/README.md) | [查看PPT](/Slides/Lecture05.pdf) |
+|  6    | 相关工具/应用简介 | [查看课程文件](/Lecture/Lecture06/README.md) | [查看PPT](/Slides/Lecture06.pdf) |
+|  7    | 需求分析和数据模型分析 | [查看课程文件](/Lecture/Lecture07/README.md) | [查看PPT](/Slides/Lecture07.pdf) |
+|  8    | 初始化项目及框架搭建 | [查看课程文件](/Lecture/Lecture08/README.md) | [查看PPT](/Slides/Lecture08.pdf) |
+|  9    | MetaMask 登录及事件监听 | [查看课程文件](/Lecture/Lecture09/README.md) | [查看PPT](/Slides/Lecture09.pdf) |
+|  10   | MetaMask 网络验证 | [查看课程文件](/Lecture/Lecture10/README.md) | [查看PPT](/Slides/Lecture10.pdf) |
+|  11   | 区块链应用前端退出 | [查看课程文件](/Lecture/Lecture11/README.md) | [查看PPT](/Slides/Lecture11.pdf) |
+|  12   | 创建 MBTI 记录 | [查看课程文件](/Lecture/Lecture12/README.md) | [查看PPT](/Slides/Lecture12.pdf) |
+|  13   | 查看、更新、销毁 MBTI 卡片 | [查看课程文件](/Lecture/Lecture13/README.md) | [查看PPT](/Slides/Lecture13.pdf) |
+|  14   | MBTI 历史显示 | [查看课程文件](/Lecture/Lecture14/README.md) | [查看PPT](/Slides/Lecture14.pdf) |
+|  15   | 查询其他用户的 MBTI | [查看课程文件](/Lecture/Lecture15/README.md) | [查看PPT](/Slides/Lecture15.pdf) |
+|  16   | 将项目部署到 Vercel | [查看课程文件](/Lecture/Lecture16/README.md) | [查看PPT](/Slides/Lecture16.pdf) |
+|  17   | 课程总结 | [查看课程文件](/Lecture/Lecture17/README.md) | [查看PPT](/Slides/Lecture17.pdf) |
 
 ## 运行前端项目
 
